@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    name: Library
+    url: jdbc:postgresql://172.22.76.51:5432/Library
+    username: postgres
+    password: 202299
+    driver-class-name: org.postgresql.Driver
+  jackson:
+    time-zone: GMT+8
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        ddl_auto: update
+server:
+  port: 8081
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

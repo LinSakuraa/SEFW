@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.CustomerMapper">
+
+    <insert id = "insert">
+        insert into customer
+        values (#{cusID}, #{cusName}, #{cusAge}, #{cusSex}, #{cusPhoneNumber}, #{cusPassword})
+    </insert>
+
+    <update id = "update">
+        update customer
+        <set>
+            <if test="cusName != null">
+                cusname = #{cusName},
+            </if>
+            <if test="cusPhoneNumber != null">
+                cusphonenumber = #{cusPhoneNumber},
+            </if>
+            <if test="cusAge != null">
+                cusage = #{cusAge},
+            </if>
+            <if test="cusSex != null">
+                cussex = #{cusSex},
+            </if>
+            <if test="cusPassword != null">
+                cuspassword = #{cusPassword}
+            </if>
+        </set>
+        where cusid = #{cusID}
+    </update>
+
+    <select id = "select" resultType="com.example.demo.entity.Customer">
+        select *
+        from customer
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="cusID != null">
+                cusid = #{cusID}
+            </if>
+            <if test="cusName != null">
+                and cusname = #{cusName}
+            </if>
+            <if test="cusAge != null">
+                and cusage = #{cusAge}
+            </if>
+            <if test="cusSex != null">
+                and cussex = #{cusSex}
+            </if>
+            <if test="cusPhoneNumber != null">
+                and cusphonenumber = #{cusPhoneNumber}
+            </if>
+            <if test="cusPassword != null">
+                and cuspassword = #{cusPassword}
+            </if>
+        </trim>
+
+    </select>
+
+    <select id="login" resultType="com.example.demo.entity.Customer">
+        select *
+        from customer
+        where cusid = #{cusID}
+    </select>
+
+    <delete id="deleteById">
+        Delete from customer
+        where cusid = #{cusID}
+    </delete>
+
+</mapper>

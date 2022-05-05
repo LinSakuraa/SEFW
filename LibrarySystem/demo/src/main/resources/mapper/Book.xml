@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.BookMapper">
+
+    <insert id = "insert">
+        insert into book
+        values (#{bookID}, #{bookName}, #{bookPublisher}, #{bookAuthorName}, #{price}, #{type}, #{num})
+    </insert>
+
+
+    <update id = "update">
+    update book
+    <set>
+        <if test="bookID != null">
+            bookid = #{bookID},
+        </if>
+        <if test="bookPublisher != null">
+            bookpublisher = #{bookPublisher},
+        </if>
+        <if test="bookAuthorName != null">
+            bookauthorname = #{bookAuthorName},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="num != null">
+            num = #{num}
+        </if>
+    </set>
+    where bookid = #{bookID}
+    </update>
+
+    <select id = "select" resultType="com.example.demo.entity.Book">
+    select *
+    from book
+    <trim prefix="WHERE" prefixOverrides="AND">
+        <if test="bookID != null">
+            bookid = #{bookID}
+        </if>
+        <if test="bookName != null">
+            and bookname = #{bookName}
+        </if>
+        <if test="bookPublisher != null">
+            and bookpublisher = #{bookPublisher}
+        </if>
+        <if test="bookAuthorName != null">
+            and bookauthorname = #{bookAuthorName}
+        </if>
+        <if test="price != null">
+            and price = #{price}
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="num != null">
+            and num = #{num}
+        </if>
+    </trim>
+
+    </select>
+
+        <select id="recommendById" resultType="com.example.demo.entity.Book">
+            SELECT * FROM book,bookborrowing
+
+            WHERE book.type in (SELECT TYPE FROM
+                ( select b.type,count(b.type) as count
+                  from bookborrowing
+                  left join book b on b.bookid = bookborrowing.bookid
+                  where cusid = #{cusID}
+                  GROUP BY b.type
+                  ORDER BY count DESC
+                  LIMIT 1)
+                as line
+                LIMIT 1)
+            ORDER BY RANDOM()
+            LIMIT 6
+
+        </select>
+
+    <select id="recommendByID_new" resultType="com.example.demo.entity.Book">
+        SELECT * FROM book
+        ORDER BY RANDOM()
+        LIMIT 6
+
+    </select>
+
+
+
+    <delete id="deleteById">
+    Delete from book
+    where bookid = #{bookID}
+    </delete>
+
+</mapper>

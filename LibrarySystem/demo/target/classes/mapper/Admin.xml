@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.AdminMapper">
+
+    <insert id = "insert">
+        insert into administrator
+        values (#{adminID}, #{adminName}, #{adminAge}, #{adminPhoneNumber}, #{adminType}, #{adminPassword})
+    </insert>
+
+    <update id = "update">
+        update administrator
+        <set>
+            <if test="adminName != null">
+                adminname = #{adminName},
+            </if>
+            <if test="adminAge != null">
+                adminage = #{adminAge},
+            </if>
+            <if test="adminPhoneNumber != null">
+                adminphonenumber = #{adminPhoneNumber},
+            </if>
+            <if test="adminType != null">
+                admintype = #{adminType},
+            </if>
+            <if test="adminPassword != null">
+                adminpassword = #{adminPassword},
+            </if>
+        </set>
+        where adminid = #{adminID}
+    </update>
+
+    <select id = "select" resultType="com.example.demo.entity.Admin">
+        select *
+        from administrator
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="adminID != null">
+                adminid = #{adminID}
+            </if>
+            <if test="adminName != null">
+                and adminname = #{adminName}
+            </if>
+            <if test="adminAge != null">
+                and adminage = #{adminAge}
+            </if>
+            <if test="adminPhoneNumber != null">
+                and adminphonenumber = #{adminPhoneNumber}
+            </if>
+            <if test="adminType != null">
+                and admintype = #{adminType}
+            </if>
+            <if test="adminPassword != null">
+                and adminpassword = #{adminPassword}
+            </if>
+        </trim>
+
+    </select>
+
+
+    <select id="login" resultType="com.example.demo.entity.Admin">
+        select *
+        from administrator
+        where adminid = #{adminID}
+    </select>
+
+    <delete id="deleteById">
+        Delete from administrator
+        where adminid = #{adminID}
+    </delete>
+
+</mapper>

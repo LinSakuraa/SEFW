@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.BorrowingMapper">
+
+    <select id = "select" resultType="com.example.demo.entity.Borrowing">
+        select *
+        from bookborrowing
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="bookID != null">
+                bookid = #{bookID}
+            </if>
+            <if test="cusID != null">
+                and cusid = #{cusID}
+            </if>
+            <if test="adminID != null">
+                and adminid = #{adminID}
+            </if>
+            <if test="borrowDate != null">
+                and borrowdate = #{borrowDate}
+            </if>
+            <if test="returnDate != null">
+                and returndate = #{returnDate}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </trim>
+    </select>
+
+    <insert id = "insert">
+        insert into bookborrowing
+        values (#{bookID}, #{cusID}, #{adminID}, #{borrowDate}, #{returnDate}, #{state})
+    </insert>
+
+    <update id = "update">
+        update bookborrowing
+        <set>
+
+            <if test="returnDate != null">
+                returndate = #{returnDate},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        where bookid = #{bookID}
+            and cusid = #{cusID}
+            and borrowdate = #{borrowDate}
+    </update>
+
+    <select id="findBook" resultType="com.example.demo.entity.Book">
+        SELECT * FROM book
+        where bookid = #{bookID}
+    </select>
+
+    <update id = "reduceNum">
+        update book
+        set num = num - 1
+        where bookid = #{bookID}
+    </update>
+
+    <update id= "addNum">
+        update book
+        set num = num + 1
+        where bookid = #{bookID}
+    </update>
+
+</mapper>
